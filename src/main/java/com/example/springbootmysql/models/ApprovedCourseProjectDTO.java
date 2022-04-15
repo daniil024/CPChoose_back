@@ -1,6 +1,9 @@
 package com.example.springbootmysql.models;
 
+import com.example.springbootmysql.models.enums.CPStatus;
+
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -13,27 +16,32 @@ public class ApprovedCourseProjectDTO {
     @Column(name = "id")
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name="professor_id")
-    private ProfessorDTO professor;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
+    @JoinColumn(name = "professor_id")
+    private UserDTO professor;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name="student_id")
-    private Set<StudentDTO> student;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
+    @JoinColumn(name = "student_id")
+    private UserDTO student;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name="course_project_id")
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
+    @JoinColumn(name = "course_project_id")
     private CourseProjectDTO courseProject;
 
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private CPStatus status;
 
     public ApprovedCourseProjectDTO() {
     }
 
-    public ApprovedCourseProjectDTO(ProfessorDTO professor, Set<StudentDTO> student, CourseProjectDTO courseProject) {
+    public ApprovedCourseProjectDTO(UserDTO professor, UserDTO student,
+                                    CourseProjectDTO courseProject, CPStatus status) {
         super();
         this.professor = professor;
         this.student = student;
         this.courseProject = courseProject;
+        this.status = status;
     }
 
     public int getId() {
@@ -44,19 +52,19 @@ public class ApprovedCourseProjectDTO {
         this.id = id;
     }
 
-    public ProfessorDTO getProfessor() {
+    public UserDTO getProfessor() {
         return professor;
     }
 
-    public void setProfessor(ProfessorDTO professor) {
+    public void setProfessor(UserDTO professor) {
         this.professor = professor;
     }
 
-    public Set<StudentDTO> getStudent() {
+    public UserDTO getStudent() {
         return student;
     }
 
-    public void setStudent(Set<StudentDTO> student) {
+    public void setStudent(UserDTO student) {
         this.student = student;
     }
 
@@ -68,17 +76,12 @@ public class ApprovedCourseProjectDTO {
         this.courseProject = courseProject;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ApprovedCourseProjectDTO that = (ApprovedCourseProjectDTO) o;
-        return id == that.id && professor.equals(that.professor) && student.equals(that.student) && courseProject.equals(that.courseProject);
+    public CPStatus getStatus() {
+        return status;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, professor, student, courseProject);
+    public void setStatus(CPStatus status) {
+        this.status = status;
     }
 
     @Override

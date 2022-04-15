@@ -45,7 +45,7 @@ public class UserDTO {
     @JoinColumn(name = "professor_id")
     private ProfessorDTO professor;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(name = "on_app_cp", referencedColumnName = "id")
     private Set<CourseProjectDTO> onApprovingCourseProjects;
 

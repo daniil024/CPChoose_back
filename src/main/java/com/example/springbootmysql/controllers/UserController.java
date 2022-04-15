@@ -1,21 +1,14 @@
 package com.example.springbootmysql.controllers;
 
-import com.example.springbootmysql.models.ProfessorDTO;
 import com.example.springbootmysql.models.UserDTO;
-import com.example.springbootmysql.repositories.UserRepo;
 import com.example.springbootmysql.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-//@RequestMapping("/user")
 public class UserController {
 
     @Autowired
@@ -25,14 +18,30 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/saveUser")
-    public UserDTO createUser(@RequestBody UserDTO userDTO){
+    public UserDTO createUser(@RequestBody UserDTO userDTO) {
         return userService.createUser(userDTO);
+    }
+
+    @PostMapping("/checkCode")
+    public Boolean isRightCode(@RequestBody UserDTO userDTO) {
+        return userService.isRightCode(userDTO);
+    }
+
+    @GetMapping("/getProfessorData/{userEmail}")
+    UserDTO getProfessor(@PathVariable String userEmail){
+        return userService.findUserByEmail(userEmail);
+    }
+
+    @PostMapping("/updateProfessor")
+    public UserDTO updateProfessor(@RequestBody UserDTO userDTO){
+        // If updated data in professor object will not appear in user then update here user
+        return userService.updateUser(userDTO);
     }
 
     // TODO: create method to get user by id
 
     @GetMapping("/users")
-    public List<UserDTO> user() {
+    public List<UserDTO> users() {
 //        String sql = "SELECT * FROM users;";
 //
 //        List<User> res = jdbcTemplate.query(sql,

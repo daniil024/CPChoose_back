@@ -12,6 +12,9 @@ public class ProfessorDTO {
     @Column(name = "id")
     private int id;
 
+    @Column(name = "company_name")
+    private String companyName;
+
     @Column(name = "cp_count")
     private int cpCount;
 
@@ -25,8 +28,9 @@ public class ProfessorDTO {
     public ProfessorDTO() {
     }
 
-    public ProfessorDTO(int cp_count, String subdivision, String position) {
+    public ProfessorDTO(int cp_count, String companyName, String subdivision, String position) {
         super();
+        this.companyName = companyName;
         this.cpCount = cp_count;
         this.subdivision = subdivision;
         this.position = position;
@@ -64,26 +68,11 @@ public class ProfessorDTO {
         this.position = position;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ProfessorDTO professor = (ProfessorDTO) o;
-        return id == professor.id && cpCount == professor.cpCount && Objects.equals(subdivision, professor.subdivision) && Objects.equals(position, professor.position);
+    public String getCompanyName() {
+        return companyName;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, cpCount, subdivision, position);
-    }
-
-    @Override
-    public String toString() {
-        return "Professor{" +
-                "id=" + id +
-                ", cp_count=" + cpCount +
-                ", subdivision='" + subdivision + '\'' +
-                ", position='" + position + '\'' +
-                '}';
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 }

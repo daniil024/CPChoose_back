@@ -21,6 +21,9 @@ public class StudentDTO {
     @Column(name = "year_of_study")
     private int yearOfStudy;
 
+    @Column(name = "cp_chose_count")
+    private int cpChoseCount;
+
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "has_approved_cp")
     private CourseProjectDTO courseProject;
@@ -29,11 +32,12 @@ public class StudentDTO {
     public StudentDTO() {
     }
 
-    public StudentDTO(String faculty, String speciality, int year_of_study) {
+    public StudentDTO(String faculty, String speciality, int year_of_study, int cpChoseCount) {
         super();
         this.faculty = faculty;
         this.speciality = speciality;
         this.yearOfStudy = year_of_study;
+        this.cpChoseCount = cpChoseCount;
     }
 
     public int getId() {
@@ -68,36 +72,19 @@ public class StudentDTO {
         this.yearOfStudy = yearOfStudy;
     }
 
+    public int getCpChoseCount() {
+        return cpChoseCount;
+    }
+
+    public void setCpChoseCount(int cpChoseCount) {
+        this.cpChoseCount = cpChoseCount;
+    }
+
     public CourseProjectDTO getCourseProject() {
         return courseProject;
     }
 
     public void setCourseProject(CourseProjectDTO courseProject) {
         this.courseProject = courseProject;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        StudentDTO student = (StudentDTO) o;
-        return id == student.id && yearOfStudy == student.yearOfStudy
-                && Objects.equals(faculty, student.faculty)
-                && Objects.equals(speciality, student.speciality);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, faculty, speciality, yearOfStudy);
-    }
-
-    @Override
-    public String toString() {
-        return "Student{" +
-                "id=" + id +
-                ", faculty='" + faculty + '\'' +
-                ", speciality='" + speciality + '\'' +
-                ", year_of_study=" + yearOfStudy +
-                '}';
     }
 }

@@ -22,6 +22,9 @@ public class CourseProjectDTO {
     @Column(name = "user_id")
     private int userId;
 
+    @Column(name = "professor_email")
+    private String professorEmail;
+
     @Column(name = "title_rus")
     private String titleRus;
 
@@ -48,7 +51,7 @@ public class CourseProjectDTO {
     @Column(name = "mentor_full_name")
     private String mentorFullName;
 
-    @Column(name = "annotation")
+    @Column(name = "annotation", length = 4096)
     private String annotation;
 
     @Column(name = "project_goal")
@@ -96,6 +99,7 @@ public class CourseProjectDTO {
 
     public CourseProjectDTO(int user_id, String titleRus,
                             String titleEng, CPType type,
+                            String professorEmail,
                             CPMode mode, String membersCount,
                             String projectInitiator, String companySubdivision,
                             String mentorFullName, String annotation,
@@ -109,6 +113,7 @@ public class CourseProjectDTO {
         this.userId = user_id;
         this.titleRus = titleRus;
         this.titleEng = titleEng;
+        this.professorEmail = professorEmail;
         this.type = type;
         this.mode = mode;
         this.membersCount = membersCount;
@@ -273,6 +278,14 @@ public class CourseProjectDTO {
 
     public void setStudentsRequirements(String studentsRequirements) {
         this.studentsRequirements = studentsRequirements;
+    }
+
+    public String getProfessorEmail() {
+        return professorEmail;
+    }
+
+    public void setProfessorEmail(String professorEmail) {
+        this.professorEmail = professorEmail;
     }
 
     public String getContacts() {

@@ -1,8 +1,10 @@
 package com.example.springbootmysql.controllers;
 
 import com.example.springbootmysql.models.CourseProjectDTO;
+import com.example.springbootmysql.models.enums.CPStatus;
 import com.example.springbootmysql.services.CourseProjectsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,9 +37,11 @@ public class CourseProjectsController {
     /*
     Find all course projects available for choose (for Student and Professor they are the same)
      */
-    @GetMapping("/getCourseProjects")
-    public List<CourseProjectDTO> findAllAvailableCourseProjects() {
-        return courseProjectsService.findAllAvailableCourseProjects();
+    @GetMapping("/getCourseProjects/{id}")
+    public List<CourseProjectDTO> findAllAvailableCourseProjects(@PathVariable int id,
+                                                                 @RequestParam(name = "professorSurname") String professorSurname,
+                                                                 @RequestParam(name = "word") String word) {
+        return courseProjectsService.findAllAvailableCourseProjects(id, professorSurname, word);
     }
 
 

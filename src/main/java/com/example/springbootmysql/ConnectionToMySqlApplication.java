@@ -1,12 +1,10 @@
 package com.example.springbootmysql;
 
-import com.example.springbootmysql.models.CourseProjectDTO;
-import com.example.springbootmysql.models.ProfessorDTO;
-import com.example.springbootmysql.models.StudentDTO;
-import com.example.springbootmysql.models.UserDTO;
+import com.example.springbootmysql.models.*;
 import com.example.springbootmysql.models.enums.CPStatus;
-import com.example.springbootmysql.repositories.courseprojects.CourseProjectsRepo;
 import com.example.springbootmysql.repositories.UserRepo;
+import com.example.springbootmysql.repositories.approvedcp.ApprovedCourseProjectsRepo;
+import com.example.springbootmysql.repositories.courseprojects.CourseProjectsRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -30,6 +28,9 @@ public class ConnectionToMySqlApplication implements CommandLineRunner {
     UserRepo userRepo;
 
     @Autowired
+    ApprovedCourseProjectsRepo approvedCourseProjectsRepo;
+
+    @Autowired
     CourseProjectsRepo courseProjectRepo;
 
     @Override
@@ -51,36 +52,78 @@ public class ConnectionToMySqlApplication implements CommandLineRunner {
 //        userRepo.save(user);
 
         //==========================
-
-//        UserDTO user1 = new UserDTO();
-//        user1.setEmail("dtsurkan@edu.hse.ru");
-//        user1.setFirstName("test112222");
-//        user1.setLastName("lastname222");
-//        user1.setPatronymic("patronymic2222");
 //
+//        UserDTO userDTO = new UserDTO();
 //        StudentDTO studentDTO = new StudentDTO();
-//        user1.setStudent(studentDTO);
-//
-//        ProfessorDTO professor = new ProfessorDTO(4, "subdivision", "position");
-//        user1.setProfessor(professor);
-//        Set<CourseProjectDTO> s = new HashSet<>();
+//        userDTO.setStudent(studentDTO);
+//        UserDTO userDTO1 = new UserDTO();
+//        ProfessorDTO professorDTO = new ProfessorDTO();
+//        userDTO1.setProfessor(professorDTO);
+//        userDTO1.setEmail("test");
+//        userRepo.save(userDTO1);
+//        ApprovedCourseProjectDTO approvedCourseProjectDTO = new ApprovedCourseProjectDTO();
+//        approvedCourseProjectDTO.setProfessor(professorDTO);
+//        Set<StudentDTO> s = new HashSet<>();
+//        s.add(studentDTO);
 //        CourseProjectDTO courseProjectDTO = new CourseProjectDTO();
-//        courseProjectDTO.setStatus(CPStatus.APPROVED);
-//        courseProjectDTO.setTitleRus("TitleRus");
-//        s.add(courseProjectDTO);
-//        courseProjectDTO.setUserId(1);
-//
-//        user1.setOnApprovingCourseProjects(s);
-//
-//        userRepo.save(user1);
-//
-//
 //        courseProjectRepo.save(courseProjectDTO);
+//        approvedCourseProjectDTO.setStudent(s);
+//        approvedCourseProjectDTO.setCourseProject(courseProjectDTO);
 //
-//        System.out.println(user1.getOnApprovingCourseProjects().toString());
-//        System.out.println(user1);
+//        approvedCourseProjectsRepo.save(approvedCourseProjectDTO);
+        // ===========================
+
+        UserDTO user1 = new UserDTO();
+        user1.setEmail("dtsurkan@edu.hse.ru");
+        user1.setFirstName("test112222");
+        user1.setLastName("lastname222");
+        user1.setPatronymic("patronymic2222");
+
+        StudentDTO studentDTO = new StudentDTO();
+        user1.setStudent(studentDTO);
+
+        ProfessorDTO professor = new ProfessorDTO(4,"companyName", "subdivision", "position");
+        user1.setProfessor(professor);
+        Set<CourseProjectDTO> s = new HashSet<>();
+
+        userRepo.save(user1);
 
 
+        for (int i = 0; i < 2; i++) {
+            CourseProjectDTO courseProjectDTO = new CourseProjectDTO();
+            courseProjectDTO.setStatus(CPStatus.APPROVED);
+            courseProjectDTO.setTitleRus("TitleRus");
+            courseProjectDTO.setAnnotation("В связи с обширной цифровизацией всевозможных процессов и технологий, в нашем обществе у людей возникает потребность и желание оптимизировать все процессы, доверив вычисления, сбор и обработку информации автоматизированным сервисам управления данными. В период выбора курсовых проектов, у преподавателей и студентов появляется острая необходимость в надежном инструменте, классифицирующем все имеющиеся курсовые проекты. Получении всех необходимых данных для быстрого заполнения отчетностей и иной документации также является необходимым функционалом для пользователей.\n" +
+                    "Проект, о котором идет речь в документе, предназначен для помощи студентам, преподавателям и другим сотрудникам в период выбора и защиты курсовых проектов. В текущий момент проект будет развиваться для сотрудников и студентов факультета компьютерных наук. Android-приложение предназначено для работы преподавателей и студентов с курсовыми проектами на этапе создания и выбора тем курсовых работ.\n");
+            s.add(courseProjectDTO);
+            courseProjectDTO.setUserId(1);
+
+            courseProjectRepo.save(courseProjectDTO);
+            ApprovedCourseProjectDTO approvedCourseProjectDTO = new ApprovedCourseProjectDTO();
+            approvedCourseProjectDTO.setCourseProject(courseProjectDTO);
+            approvedCourseProjectDTO.setProfessor(userRepo.findByEmail(user1.getEmail()));
+            approvedCourseProjectDTO.setStudent(user1);
+            approvedCourseProjectDTO.setStatus(courseProjectDTO.getStatus());
+            approvedCourseProjectsRepo.save(approvedCourseProjectDTO);
+            //courseProjectRepo.save(courseProjectDTO);
+        }
+
+        for (int i = 0; i < 2; i++) {
+            CourseProjectDTO courseProjectDTO = new CourseProjectDTO();
+            courseProjectDTO.setStatus(CPStatus.CREATED);
+            courseProjectDTO.setTitleRus("TitleRus");
+            courseProjectDTO.setAnnotation("В связи с обширной цифровизацией всевозможных процессов и технологий, в нашем обществе у людей возникает потребность и желание оптимизировать все процессы, доверив вычисления, сбор и обработку информации автоматизированным сервисам управления данными. В период выбора курсовых проектов, у преподавателей и студентов появляется острая необходимость в надежном инструменте, классифицирующем все имеющиеся курсовые проекты. Получении всех необходимых данных для быстрого заполнения отчетностей и иной документации также является необходимым функционалом для пользователей.\n" +
+                    "Проект, о котором идет речь в документе, предназначен для помощи студентам, преподавателям и другим сотрудникам в период выбора и защиты курсовых проектов. В текущий момент проект будет развиваться для сотрудников и студентов факультета компьютерных наук. Android-приложение предназначено для работы преподавателей и студентов с курсовыми проектами на этапе создания и выбора тем курсовых работ.\n");
+            s.add(courseProjectDTO);
+            courseProjectDTO.setUserId(1);
+            //courseProjectRepo.save(courseProjectDTO);
+        }
+
+
+
+        user1.setOnApprovingCourseProjects(s);
+
+        //userRepo.save(user1);
 
         // ====================
 

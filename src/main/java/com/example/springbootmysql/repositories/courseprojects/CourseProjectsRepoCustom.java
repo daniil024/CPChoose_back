@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface CourseProjectsRepoCustom {
 
-    public List<CourseProjectDTO> findAllAvailableCourseProjects();
+    List<CourseProjectDTO> findAllAvailableCourseProjects(int id, String professorSurname, String word);
 }
