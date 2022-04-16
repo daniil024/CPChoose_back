@@ -22,10 +22,15 @@ public class ApprovedCourseProjectsRepoImpl implements ApprovedCourseProjectsRep
         return query.getResultList();
     }
 
-    public List<ApprovedCourseProjectDTO> getWaitingForApproving(UserDTO professor){
-        Query query = entityManager.createNativeQuery("SELECT * FROM approved_course_projects " +
-                "WHERE professor_id = " + professor.getId()/* + " and (status = APPROVED"+
-                " or status = PARTIALLYSELECTED)"*/, ApprovedCourseProjectDTO.class);
+    public List<ApprovedCourseProjectDTO> getWaitingForApproving(UserDTO professor) {
+        System.out.println(CPStatus.DECLINED);
+        String sql = String.format("SELECT * FROM approved_course_projects " +
+                        "WHERE professor_id = %d and status not in ('%s', '%s')",
+                professor.getId(), CPStatus.SELECTED.name(), CPStatus.DECLINED.name());
+        Query query = entityManager.createNativeQuery(sql, ApprovedCourseProjectDTO.class);
+//        Query query = entityManager.createNativeQuery("SELECT * FROM approved_course_projects " +
+//                "WHERE professor_id = " + professor.getId() + " and status not in (" + CPStatus.DECLINED.name() +", "+
+//                /*" or status not in " +*/ CPStatus.SELECTED.name() + " )", ApprovedCourseProjectDTO.class);
         return query.getResultList();
     }
 }

@@ -3,6 +3,7 @@ package com.example.springbootmysql.controllers;
 import com.example.springbootmysql.models.ApprovedCourseProjectDTO;
 import com.example.springbootmysql.models.CourseProjectDTO;
 import com.example.springbootmysql.models.UserDTO;
+import com.example.springbootmysql.models.enums.CPStatus;
 import com.example.springbootmysql.services.ApprovedCPService;
 import com.example.springbootmysql.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,12 +46,25 @@ public class ApprovedCPController {
     public List<ApprovedCourseProjectDTO> approveCP(
             @RequestBody ApprovedCourseProjectDTO approvedCourseProjectDTO
     ) {
-        // TODO
+        approvedCourseProjectDTO.setStatus(CPStatus.SELECTED);
+        approvedCPService.updateApprovingCP(approvedCourseProjectDTO);
+        approvedCPService.generatePdf(approvedCourseProjectDTO);
+        new Thread(() -> approvedCPService
+                .sendAttachment(approvedCourseProjectDTO.getStudent().getEmail())).start();
+        return getWaitingForApproving(approvedCourseProjectDTO.getProfessor().getEmail());
+    }
+
+    @PostMapping("/declineCP")
+    public List<ApprovedCourseProjectDTO> declineCP(
+            @RequestBody ApprovedCourseProjectDTO approvedCourseProjectDTO
+    ) {
+        approvedCourseProjectDTO.setStatus(CPStatus.DECLINED);
+        approvedCPService.updateApprovingCP(approvedCourseProjectDTO);
         return getWaitingForApproving(approvedCourseProjectDTO.getProfessor().getEmail());
     }
 
     @GetMapping("/getWaitingForApprovingCP/{userEmail}")
-    public List<ApprovedCourseProjectDTO> getWaitingForApproving(@PathVariable String userEmail){
+    public List<ApprovedCourseProjectDTO> getWaitingForApproving(@PathVariable String userEmail) {
         return approvedCPService.getWaitingForApproving(userEmail);
     }
 
@@ -58,4 +72,6 @@ public class ApprovedCPController {
     public List<ApprovedCourseProjectDTO> findApprovedCPByProfessorId(@PathVariable int id) {
         return approvedCPService.findApprovedCPByProfessorId(id);
     }
+
+
 }

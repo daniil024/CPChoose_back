@@ -5,6 +5,7 @@ import com.example.springbootmysql.models.enums.CPStatus;
 import com.example.springbootmysql.repositories.UserRepo;
 import com.example.springbootmysql.repositories.approvedcp.ApprovedCourseProjectsRepo;
 import com.example.springbootmysql.repositories.courseprojects.CourseProjectsRepo;
+import com.example.springbootmysql.services.ApprovedCPService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -32,6 +33,10 @@ public class ConnectionToMySqlApplication implements CommandLineRunner {
 
     @Autowired
     CourseProjectsRepo courseProjectRepo;
+
+
+    @Autowired
+    ApprovedCPService approvedCPService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -72,6 +77,8 @@ public class ConnectionToMySqlApplication implements CommandLineRunner {
 //
 //        approvedCourseProjectsRepo.save(approvedCourseProjectDTO);
         // ===========================
+
+        //approvedCPService.generatePdf(new ApprovedCourseProjectDTO());
 
         UserDTO user1 = new UserDTO();
         user1.setEmail("dtsurkan@edu.hse.ru");
@@ -122,6 +129,9 @@ public class ConnectionToMySqlApplication implements CommandLineRunner {
 
 
         user1.setOnApprovingCourseProjects(s);
+
+
+
 
         //userRepo.save(user1);
 
